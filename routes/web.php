@@ -13,11 +13,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
+});
+// Route::get('/halamanuser', function () {
+//     return view('halamanuser');
+// });
+Route::get('/template2', function () {
+    return view('template.template2');
 });
 
-Route::resource('blog', BlogController::class);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
+
+Route::resource('blog', BlogController::class)->middleware('checkRole:admin');
+Route::resource('user', UserController::class)->middleware(['checkRole:admin,user']);
 use App\Http\Controllers\BlogController;
 Route::get('/search', [BlogController::class, 'search'])->name('search');

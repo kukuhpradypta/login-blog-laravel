@@ -26,18 +26,24 @@
     </ul>
     @yield('pencarian')
     <!-- Right navbar links -->
-    {{-- <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
 
            <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Account
+ {{ Auth::user()->name }}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Account setting</a>
-          <a class="dropdown-item" href="#">Logout</a>
+          <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Logout') }}
+                            </x-dropdown-link>
+                        </form>
       </li>
-    </ul> --}}
+    </ul>
   </nav>
   <!-- /.navbar -->
 
@@ -51,7 +57,7 @@
           <img src="https://img.posjateng.id/img/author/dede-suryana-JAHuSxBCAT.jpg" style="width: 40px; height:40px;" class="rounded-circle" alt="User Image">
         </div>
         <div class="info">
-          <p class="d-block" style="font-size: 16px;color:white;">Kukuh pradypta</p>
+          <p class="d-block" style="font-size: 16px;color:white;">{{ Auth::user()->name }}</p>
           
         </div>
       </div>
@@ -61,12 +67,24 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
             <li class="nav-item">
+                @if(Auth::check())
+                @if(Auth::user()->role == 'admin')
                 <a href="{{ route('blog.index') }}" class="nav-link"style="color: white">
                 <i class="nav-icon fas fa-calendar-plus"></i>
                     <p style="font-size: 15px;color:white;">
                         Crud Data Blog       
                     </p>
-                </a>       
+                </a>
+                @endif
+                @if(Auth::user()->role == 'user' or Auth::user()->role == 'admin')       
+                <a href="/user" class="nav-link"style="color: white">
+                <i class="nav-icon fas fa-user"></i>
+                    <p style="font-size: 15px;color:white;">
+                        Halaman User      
+                    </p>
+                </a>
+                @endif
+                @endif       
           </li>
     <!-- /.sidebar -->
   </aside>
@@ -82,7 +100,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('blog.index') }}">Home</a></li>
+              <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
               <li class="breadcrumb-item active">@yield('page')</li>
             </ol>
           </div>
