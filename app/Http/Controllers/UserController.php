@@ -18,7 +18,12 @@ class UserController extends Controller
         $blogs = Blog::latest()->paginate(10);
         return view('user.halamanuser', compact('blogs'));
     }
-
+    public function search(Request $request)
+    {
+        $keyword = $request->search;
+        $blogs = Blog::where('title', 'like', "%" . $keyword . "%")->paginate(5);
+        return view('user.halamanuser', compact('blogs'))->with('i', (request()->input('page', 1) - 1) * 5);
+    }
     /**
      * Show the form for creating a new resource.
      *

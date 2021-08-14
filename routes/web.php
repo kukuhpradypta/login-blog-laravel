@@ -33,3 +33,5 @@ Route::resource('blog', BlogController::class)->middleware('checkRole:admin');
 Route::resource('user', UserController::class)->middleware(['checkRole:admin,user']);
 use App\Http\Controllers\BlogController;
 Route::get('/search', [BlogController::class, 'search'])->name('search');
+use App\Http\Controllers\UserController;
+Route::get('/search', [UserController::class, 'search'])->name('search');
